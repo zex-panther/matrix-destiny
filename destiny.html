@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrix Destiny</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: monospace;
+      background: black;
+      color: #00ff00;
+      overflow: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 10vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      font-size: 1rem;
+      padding: 10px;
+      margin: 10px;
+      background: black;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+    }
+
+    #results {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="content">
+    <h1>Discover Your Destiny</h1>
+    <input type="text" id="name" placeholder="Enter your name" />
+    <input type="date" id="birthdate" />
+    <button onclick="revealDestiny()">Reveal Destiny</button>
+    <button onclick="downloadCertificate()">Download Certificate</button>
+    <div id="results"></div>
+    <audio id="sound" src="https://www.soundjay.com/button/sounds/beep-07.mp3"></audio>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    const letters = '01';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px monospace';
+      drops.forEach((y, i) => {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        const x = i * fontSize;
+        ctx.fillText(text, x, y * fontSize);
+        drops[i] = y * fontSize > canvas.height && Math.random() > 0.975 ? 0 : y + 1;
+      });
+    }
+    setInterval(drawMatrix, 33);
+
+    const destinies = [
+      "The Oracle's Chosen",
+      "Bearer of the Source Code",
+      "Sentinel Whisperer",
+      "Breaker of Loops",
+      "Architect’s Shadow",
+      "Glitchborn",
+      "Neo’s Echo",
+      "The Lost Keymaker",
+      "Agent Hunter",
+      "Cipher of Reality",
+      "The Awakened One",
+      "Ghost in the Grid",
+      "Pathfinder Beyond Zion",
+      "Shepherd of the Simulacra",
+      "Harbinger of the One",
+      "Firewall Prophet"
+    ];
+
+    const soulAges = [
+      "Infant Soul",
+      "Young Soul",
+      "Mature Soul",
+      "Old Soul",
+      "Elder Soul",
+      "Ancient Soul"
+    ];
+
+    function hashCode(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return Math.abs(hash);
+    }
+
+    function numerologyNumber(str) {
+      let total = 0;
+      for (let char of str) {
+        if (!isNaN(char)) total += parseInt(char);
+        else total += char.toUpperCase().charCodeAt(0) % 9;
+      }
+      while (total > 9) {
+        total = total.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+      }
+      return total;
+    }
+
+    function revealDestiny() {
+      const name = document.getElementById("name").value.trim();
+      const birthdate = document.getElementById("birthdate").value;
+      const input = name + birthdate;
+      if (!name || !birthdate) {
+        document.getElementById("results").innerText = "Please enter both name and birthdate.";
+        return;
+      }
+      const hash = hashCode(input);
+      const destiny = destinies[hash % destinies.length];
+      const soulAge = soulAges[hash % soulAges.length];
+      const personalNum = numerologyNumber(name + birthdate);
+
+      document.getElementById("results").innerHTML = `
+        <div>Your Destiny: <strong>${destiny}</strong></div>
+        <div>Your Soul Age: <strong>${soulAge}</strong></div>
+        <div>Your Personal Number: <strong>${personalNum}</strong></div>
+      `;
+      document.getElementById("sound").play();
+    }
+
+    function downloadCertificate() {
+      const name = document.getElementById("name").value.trim();
+      const birthdate = document.getElementById("birthdate").value;
+      if (!name || !birthdate) {
+        alert("Enter name and birthdate first");
+        return;
+      }
+      const input = name + birthdate;
+      const hash = hashCode(input);
+      const destiny = destinies[hash % destinies.length];
+      const soulAge = soulAges[hash % soulAges.length];
+      const personalNum = numerologyNumber(name + birthdate);
+
+      const certContent = `Matrix Destiny Certificate\n\nName: ${name}\nBirthdate: ${birthdate}\n\nYour Destiny: ${destiny}\nYour Soul Age: ${soulAge}\nYour Personal Number: ${personalNum}`;
+      const blob = new Blob([certContent], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Destiny_Certificate_${name}.txt`;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
