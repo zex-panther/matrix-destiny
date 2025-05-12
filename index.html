@@ -50,6 +50,18 @@
       text-shadow: 0 0 10px #00ff00;
       line-height: 2;
     }
+
+    .terminal-effect {
+      font-size: 1.3rem;
+      white-space: pre-wrap;
+      text-align: left;
+      width: 80%;
+      margin: 20px auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      border: 1px solid #0f0;
+      box-shadow: 0 0 10px #0f0;
+    }
   </style>
 </head>
 <body>
@@ -63,6 +75,7 @@
     <div id="results"></div>
     <audio id="sound" src="https://www.soundjay.com/button/sounds/beep-07.mp3"></audio>
     <audio id="awakening" src="https://www.soundjay.com/misc/sounds/ambient-space-1.mp3"></audio>
+    <audio loop autoplay src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
   </div>
 
   <script>
@@ -146,7 +159,7 @@
         return;
       }
 
-      document.getElementById("results").innerHTML = `<div>Loading reality...</div>`;
+      document.getElementById("results").innerHTML = `<div class='terminal-effect'>Loading reality...\nAccessing Source Code...\nDecrypting Matrix Signature...</div>`;
       document.getElementById("sound").play();
 
       setTimeout(() => {
@@ -156,12 +169,14 @@
         const personalNum = numerologyNumber(name + birthdate);
 
         document.getElementById("results").innerHTML = `
-          <div>Your Destiny: <strong>${destiny}</strong></div>
-          <div>Your Soul Age: <strong>${soulAge}</strong></div>
-          <div>Your Personal Number: <strong>${personalNum}</strong></div>
+          <div class='terminal-effect'>
+            Destiny: <strong>${destiny}</strong>\n
+            Soul Age: <strong>${soulAge}</strong>\n
+            Personal Number: <strong>${personalNum}</strong>
+          </div>
         `;
         document.getElementById("awakening").play();
-      }, 2000);
+      }, 3000);
     }
 
     function downloadCertificate() {
