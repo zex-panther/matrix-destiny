@@ -58,10 +58,11 @@
     <h1>Discover Your Destiny</h1>
     <input type="text" id="name" placeholder="Enter your name" />
     <input type="date" id="birthdate" />
-    <button onclick="revealDestiny()">Reveal Destiny</button>
+    <button onclick="redPill()">Take the Red Pill</button>
     <button onclick="downloadCertificate()">Download Certificate</button>
     <div id="results"></div>
     <audio id="sound" src="https://www.soundjay.com/button/sounds/beep-07.mp3"></audio>
+    <audio id="awakening" src="https://www.soundjay.com/misc/sounds/ambient-space-1.mp3"></audio>
   </div>
 
   <script>
@@ -136,7 +137,7 @@
       return total;
     }
 
-    function revealDestiny() {
+    function redPill() {
       const name = document.getElementById("name").value.trim();
       const birthdate = document.getElementById("birthdate").value;
       const input = name + birthdate;
@@ -144,17 +145,23 @@
         document.getElementById("results").innerText = "Please enter both name and birthdate.";
         return;
       }
-      const hash = hashCode(input);
-      const destiny = destinies[hash % destinies.length];
-      const soulAge = soulAges[hash % soulAges.length];
-      const personalNum = numerologyNumber(name + birthdate);
 
-      document.getElementById("results").innerHTML = `
-        <div>Your Destiny: <strong>${destiny}</strong></div>
-        <div>Your Soul Age: <strong>${soulAge}</strong></div>
-        <div>Your Personal Number: <strong>${personalNum}</strong></div>
-      `;
+      document.getElementById("results").innerHTML = `<div>Loading reality...</div>`;
       document.getElementById("sound").play();
+
+      setTimeout(() => {
+        const hash = hashCode(input);
+        const destiny = destinies[hash % destinies.length];
+        const soulAge = soulAges[hash % soulAges.length];
+        const personalNum = numerologyNumber(name + birthdate);
+
+        document.getElementById("results").innerHTML = `
+          <div>Your Destiny: <strong>${destiny}</strong></div>
+          <div>Your Soul Age: <strong>${soulAge}</strong></div>
+          <div>Your Personal Number: <strong>${personalNum}</strong></div>
+        `;
+        document.getElementById("awakening").play();
+      }, 2000);
     }
 
     function downloadCertificate() {
